@@ -219,7 +219,18 @@ const ThreeDCarousel = ({ items }: { items: CarouselItem[] }) => {
                                 <p className="text-white/60 text-sm tracking-wider font-light uppercase">{activeItem.desc}</p>
                             </motion.div>
 
-                            <button onClick={handleClose} className="absolute top-0 right-0 p-4 text-white/50 hover:text-white transition-colors">
+                            <button
+                                onClick={handleClose}
+                                className="absolute top-4 right-4 px-6 py-3 text-white/90 hover:text-gold transition-all duration-300 font-bold tracking-[0.3em] uppercase text-xs backdrop-blur-sm bg-black/20 rounded-sm border border-white/10 hover:border-gold/50 hover:scale-105"
+                                style={{
+                                    textShadow: `
+                                        0 0 10px rgba(255, 255, 255, 0.6),
+                                        0 0 20px rgba(255, 255, 255, 0.4),
+                                        0 0 30px rgba(255, 255, 255, 0.3),
+                                        0 0 40px rgba(212, 175, 55, 0.2)
+                                    `
+                                }}
+                            >
                                 Close
                             </button>
                         </div>

@@ -106,28 +106,29 @@ export default function ProjectsSection() {
                                                 href={project.github}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
                                                 className="text-white/40 hover:text-white transition-all duration-300 hover:scale-125"
                                             >
                                                 <Github size={22} strokeWidth={1} />
                                             </a>
                                         )}
-                                        <Link
-                                            href={project.link}
-                                            className="text-white/40 hover:text-gold transition-all duration-300 hover:scale-125"
-                                        >
+                                        <div className="text-white/40 group-hover:text-gold transition-all duration-300 group-hover:scale-125">
                                             <ArrowUpRight size={26} strokeWidth={1} />
-                                        </Link>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-8">
+                                <Link
+                                    href={project.link}
+                                    className="block space-y-8 cursor-pointer"
+                                >
                                     <h3 className="text-[clamp(1.8rem,4vw,3.5rem)] font-cinzel font-black text-white group-hover:tracking-wider transition-all duration-1000 uppercase leading-[0.9] pb-4">
                                         {project.title}
                                     </h3>
                                     <p className="text-white/60 text-[12px] leading-loose max-w-sm font-medium tracking-[0.1em] uppercase border-l border-gold/20 pl-6">
                                         {project.description}
                                     </p>
-                                </div>
+                                </Link>
 
                                 <div className="mt-16 flex flex-wrap gap-x-10 gap-y-5">
                                     {project.tags.map((tag) => (

@@ -80,8 +80,11 @@ export default function Navbar() {
 
                     {/* Mobile Toggle */}
                     <button
-                        className="lg:hidden text-white/30 hover:text-white transition-all p-2"
+                        className="lg:hidden text-white/80 hover:text-gold transition-all duration-300 p-2"
                         onClick={() => setMobileMenuOpen(true)}
+                        style={{
+                            filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.3))`
+                        }}
                     >
                         <Menu size={24} strokeWidth={1} />
                     </button>
@@ -106,8 +109,11 @@ export default function Navbar() {
                         <div className="flex justify-between items-center relative z-10">
                             <span className="font-cinzel text-lg font-black text-white tracking-[0.3em]">SPARSH</span>
                             <button
-                                className="text-white/20 hover:text-white transition-colors p-3"
+                                className="text-white/80 hover:text-gold transition-all duration-300 p-3 backdrop-blur-sm bg-black/10 rounded-sm border border-white/10 hover:border-gold/50 hover:scale-110"
                                 onClick={() => setMobileMenuOpen(false)}
+                                style={{
+                                    filter: `drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 30px rgba(212, 175, 55, 0.2))`
+                                }}
                             >
                                 <X size={40} strokeWidth={1} />
                             </button>

@@ -106,7 +106,15 @@ export default function SkillsSection() {
                         {["Next.js", "Three.js", "Framer", "Tailwind", "Python", "CapCut", "Resolve"].map((tech) => (
                             <span
                                 key={tech}
-                                className="text-[11px] font-black tracking-[0.5em] uppercase text-white/30 hover:text-gold transition-all duration-500 cursor-default hover:scale-110"
+                                className="text-[11px] font-black tracking-[0.5em] uppercase text-white/80 hover:text-gold transition-all duration-500 cursor-default hover:scale-110"
+                                style={{
+                                    textShadow: `
+                                        0 0 10px rgba(255, 255, 255, 0.4),
+                                        0 0 20px rgba(255, 255, 255, 0.3),
+                                        0 0 30px rgba(255, 255, 255, 0.2),
+                                        0 0 40px rgba(212, 175, 55, 0.15)
+                                    `
+                                }}
                             >
                                 {tech}
                             </span>
