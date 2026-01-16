@@ -205,15 +205,8 @@ const InteractiveVideo = () => {
                     transition={{ delay: 0.5, duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
                     className="relative w-full h-full flex items-center justify-center"
                 >
-                    <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-full object-contain mix-blend-lighten contrast-125 saturate-[1.2]"
-                    >
-                        <source src="/videos/1226.mp4" type="video/mp4" />
-                    </video>
+                    {/* 3D Interactive Robot - cursor following */}
+                    <CursorRobot className="w-full h-full" />
                     {/* Seamless Bottom Blend */}
                     <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-[#020202] via-[#020202]/40 to-transparent pointer-events-none" />
                 </motion.div>
