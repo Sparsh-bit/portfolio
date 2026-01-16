@@ -1,9 +1,10 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
-import { Float, Environment, ContactShadows } from "@react-three/drei";
+import { Float, ContactShadows, Environment } from "@react-three/drei";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Robot Head Component - Follows cursor
 function RobotHead({ mousePos }: { mousePos: { x: number; y: number } }) {
@@ -15,10 +16,8 @@ function RobotHead({ mousePos }: { mousePos: { x: number; y: number } }) {
         if (!headRef.current) return;
 
         // Smooth head rotation following cursor
-        // X rotation: positive mouseY = look down, negative = look up
-        // Y rotation: positive mouseX = look right, negative = look left
         const targetRotationY = mousePos.x * 0.4;
-        const targetRotationX = mousePos.y * 0.3; // Removed negative to fix inversion
+        const targetRotationX = mousePos.y * 0.3;
 
         headRef.current.rotation.y = THREE.MathUtils.lerp(
             headRef.current.rotation.y,
@@ -31,10 +30,10 @@ function RobotHead({ mousePos }: { mousePos: { x: number; y: number } }) {
             0.08
         );
 
-        // Eye pupil movement - follows cursor direction
+        // Eye pupil movement
         if (eyeLeftRef.current && eyeRightRef.current) {
             const eyeOffsetX = mousePos.x * 0.15;
-            const eyeOffsetY = -mousePos.y * 0.1; // Negative to match screen coordinates
+            const eyeOffsetY = -mousePos.y * 0.1;
             eyeLeftRef.current.position.x = -0.25 + eyeOffsetX;
             eyeLeftRef.current.position.y = 0.1 + eyeOffsetY;
             eyeRightRef.current.position.x = 0.25 + eyeOffsetX;
@@ -168,11 +167,24 @@ function RobotBody() {
     );
 }
 
-// Complete Robot Assembly
-function Robot({ mousePos }: { mousePos: { x: number; y: number } }) {
+// Complete Robot Assembly with entrance animation
+function Robot({ mousePos, isVisible }: { mousePos: { x: number; y: number }; isVisible: boolean }) {
+    const groupRef = useRef<THREE.Group>(null);
+    const [scale, setScale] = useState(0);
+    const [posY, setPosY] = useState(-2);
+
+    useFrame((_, delta) => {
+        if (isVisible) {
+            // Animate scale from 0 to 0.85
+            setScale(prev => THREE.MathUtils.lerp(prev, 0.85, delta * 2));
+            // Animate position from below to normal
+            setPosY(prev => THREE.MathUtils.lerp(prev, -0.2, delta * 2));
+        }
+    });
+
     return (
         <Float speed={1.5} rotationIntensity={0.05} floatIntensity={0.2}>
-            <group position={[0, -0.2, 0]} scale={0.85}>
+            <group ref={groupRef} position={[0, posY, 0]} scale={scale}>
                 <RobotHead mousePos={mousePos} />
                 <RobotNeck />
                 <RobotBody />
@@ -182,7 +194,7 @@ function Robot({ mousePos }: { mousePos: { x: number; y: number } }) {
 }
 
 // Scene Setup
-function Scene({ mousePos }: { mousePos: { x: number; y: number } }) {
+function Scene({ mousePos, isVisible }: { mousePos: { x: number; y: number }; isVisible: boolean }) {
     return (
         <>
             <color attach="background" args={["#020202"]} />
@@ -206,7 +218,7 @@ function Scene({ mousePos }: { mousePos: { x: number; y: number } }) {
             />
             <pointLight position={[0, 2, 3]} intensity={0.5} color="#D4AF37" />
 
-            <Robot mousePos={mousePos} />
+            <Robot mousePos={mousePos} isVisible={isVisible} />
 
             <ContactShadows
                 position={[0, -1.8, 0]}
@@ -224,6 +236,8 @@ function Scene({ mousePos }: { mousePos: { x: number; y: number } }) {
 
 export default function CursorRobot({ className }: { className?: string }) {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [isLoading, setIsLoading] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -235,26 +249,113 @@ export default function CursorRobot({ className }: { className?: string }) {
         return () => window.removeEventListener("mousemove", handleMouseMove);
     }, []);
 
+    // Premium loading sequence
+    useEffect(() => {
+        const loadTimer = setTimeout(() => {
+            setIsLoading(false);
+        }, 800);
+
+        const visibleTimer = setTimeout(() => {
+            setIsVisible(true);
+        }, 1000);
+
+        return () => {
+            clearTimeout(loadTimer);
+            clearTimeout(visibleTimer);
+        };
+    }, []);
+
     return (
         <div className={`relative ${className}`}>
-            {/* Ambient Glow */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
-            </div>
+            {/* Premium Loading State */}
+            <AnimatePresence>
+                {isLoading && (
+                    <motion.div
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="absolute inset-0 z-20 flex flex-col items-center justify-center"
+                    >
+                        {/* Initializing Animation */}
+                        <motion.div
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                            className="relative"
+                        >
+                            {/* Outer Ring */}
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                className="w-24 h-24 rounded-full border-2 border-gold/20 border-t-gold"
+                            />
+                            {/* Inner Ring */}
+                            <motion.div
+                                animate={{ rotate: -360 }}
+                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-2 rounded-full border border-gold/30 border-b-gold"
+                            />
+                            {/* Center Dot */}
+                            <motion.div
+                                animate={{ scale: [1, 1.2, 1] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-gold"
+                            />
+                        </motion.div>
 
-            <Canvas
-                camera={{ position: [0, 0.8, 4.5], fov: 40 }}
-                dpr={[1, 2]}
-                gl={{ antialias: true, alpha: true }}
+                        {/* Loading Text */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3, duration: 0.5 }}
+                            className="mt-8 text-[10px] text-gold/60 tracking-[0.5em] uppercase font-bold"
+                        >
+                            Initializing
+                        </motion.p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Ambient Glow - animates in */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.5 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
             >
-                <Scene mousePos={mousePos} />
-            </Canvas>
+                <div className="w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
+            </motion.div>
 
-            {/* Status Indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+            {/* Canvas Container with fade in */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isVisible ? 1 : 0 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="w-full h-full"
+            >
+                <Canvas
+                    camera={{ position: [0, 0.8, 4.5], fov: 40 }}
+                    dpr={[1, 2]}
+                    gl={{ antialias: true, alpha: true }}
+                >
+                    <Scene mousePos={mousePos} isVisible={isVisible} />
+                </Canvas>
+            </motion.div>
+
+            {/* Status Indicator - appears after robot */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+                transition={{ duration: 0.8, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3"
+            >
+                <motion.div
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="w-2 h-2 rounded-full bg-gold"
+                />
                 <span className="text-[9px] text-white/40 tracking-[0.4em] uppercase font-bold">Active</span>
-            </div>
+            </motion.div>
         </div>
     );
 }
