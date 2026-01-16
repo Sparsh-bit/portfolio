@@ -9,6 +9,9 @@
  * - CORS protection
  */
 
+// Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { withSecurity, type SecurityContext } from '@/lib/security';
 
@@ -88,9 +91,6 @@ async function contactHandler(
             email,
             messageLength: message.length,
         });
-
-        // Simulate processing
-        await new Promise(resolve => setTimeout(resolve, 100));
 
         return NextResponse.json({
             success: true,

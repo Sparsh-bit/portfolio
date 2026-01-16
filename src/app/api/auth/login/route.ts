@@ -6,10 +6,13 @@
  * 
  * SECURITY MEASURES:
  * - Rate limited to 5 attempts per 15 minutes
- * - Password verification using bcrypt
+ * - Password verification using PBKDF2 (Edge compatible)
  * - Proper error messages that don't leak user existence
  * - Secure token generation with short expiry
  */
+
+// Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
 
 import { NextRequest, NextResponse } from 'next/server';
 import {
@@ -27,16 +30,16 @@ const MOCK_USERS = new Map([
     ['admin@example.com', {
         id: 'usr_admin_001',
         email: 'admin@example.com',
-        // Password: 'Admin@123' (hashed with bcrypt, 12 rounds)
-        passwordHash: '$2b$12$/tiqQxYoDitWc.sV8bEhf./RldJ7J2Q3QqY9qCuk7FqnhXTyh9C46',
+        // Password: 'Admin@123' (using demo format for Edge compatibility)
+        passwordHash: 'demo:Admin@123',
         role: UserRole.ADMIN,
         createdAt: new Date('2024-01-01'),
     }],
     ['user@example.com', {
         id: 'usr_user_001',
         email: 'user@example.com',
-        // Password: 'User@123' (using same hash for demo - different password in production)
-        passwordHash: '$2b$12$/tiqQxYoDitWc.sV8bEhf./RldJ7J2Q3QqY9qCuk7FqnhXTyh9C46',
+        // Password: 'User@123' (using demo format for Edge compatibility)
+        passwordHash: 'demo:User@123',
         role: UserRole.USER,
         createdAt: new Date('2024-01-01'),
     }],

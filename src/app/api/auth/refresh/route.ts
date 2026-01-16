@@ -9,6 +9,9 @@
  * - Returns new access token only (not new refresh token)
  */
 
+// Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import {
     authRoute,

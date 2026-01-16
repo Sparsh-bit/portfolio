@@ -10,6 +10,9 @@
  * - Rate limited
  */
 
+// Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { protectedRoute, type SecurityContext, UserRole } from '@/lib/security';
 

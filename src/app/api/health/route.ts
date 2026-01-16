@@ -5,6 +5,9 @@
  * Returns security configuration status (non-sensitive only).
  */
 
+// Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { publicRoute, validateSecurityConfig, type SecurityContext } from '@/lib/security';
 
