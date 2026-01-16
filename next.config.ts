@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Removed 'output: export' to enable API routes
-  // Use 'next build && next start' for production deployment
   images: {
     unoptimized: true,
   },
