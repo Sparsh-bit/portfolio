@@ -4,6 +4,138 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion, useSpring, useTransform, useScroll } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import CursorRobot from "@/components/ui/CursorRobot";
+
+/**
+ * Floating Particles Component
+ */
+const FloatingParticles = () => {
+    const [particles, setParticles] = useState<Array<{ x: number, y: number, scale: number, delay: number, duration: number }>>([]);
+
+    useEffect(() => {
+        // Generate particles only on client
+        setParticles([...Array(15)].map(() => ({
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+            scale: Math.random() * 0.5 + 0.5,
+            delay: Math.random() * 5,
+            duration: Math.random() * 10 + 10,
+        })));
+    }, []);
+
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {particles.map((p, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-gold/40 rounded-full"
+                    style={{
+                        left: `${p.x}%`,
+                        top: `${p.y}%`,
+                        scale: p.scale,
+                    }}
+                    animate={{
+                        y: [0, -500],
+                        opacity: [0, 1, 0],
+                    }}
+                    transition={{
+                        duration: p.duration,
+                        repeat: Infinity,
+                        delay: p.delay,
+                        ease: "linear",
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
+/**
+ * Animated Geometric Shapes
+ */
+const GeometricShapes = () => {
+    return (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {/* Rotating Ring */}
+            <motion.div
+                className="absolute top-1/4 right-1/4 w-64 h-64"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            >
+                <div className="w-full h-full rounded-full border border-gold/10" />
+            </motion.div>
+
+            {/* Pulsing Circle */}
+            <motion.div
+                className="absolute bottom-1/3 right-1/3 w-40 h-40"
+                animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.2, 0.4, 0.2],
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+                <div className="w-full h-full rounded-full bg-gradient-to-tr from-gold/20 to-transparent blur-xl" />
+            </motion.div>
+
+            {/* Floating Squares */}
+            {[...Array(5)].map((_, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute border border-gold/10"
+                    style={{
+                        width: 20 + i * 15,
+                        height: 20 + i * 15,
+                        top: `${20 + i * 15}%`,
+                        right: `${10 + i * 10}%`,
+                    }}
+                    animate={{
+                        rotate: [0, 90, 180, 270, 360],
+                        y: [0, -20, 0, 20, 0],
+                    }}
+                    transition={{
+                        duration: 8 + i * 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: i * 0.5,
+                    }}
+                />
+            ))}
+
+            {/* Animated Lines */}
+            <svg className="absolute top-0 right-0 w-full h-full opacity-20">
+                <motion.line
+                    x1="70%"
+                    y1="10%"
+                    x2="90%"
+                    y2="40%"
+                    stroke="url(#goldGradient)"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: [0, 1, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.line
+                    x1="80%"
+                    y1="60%"
+                    x2="95%"
+                    y2="80%"
+                    stroke="url(#goldGradient)"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: [0, 1, 0] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                />
+                <defs>
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#C9A227" stopOpacity="0" />
+                        <stop offset="50%" stopColor="#C9A227" stopOpacity="1" />
+                        <stop offset="100%" stopColor="#C9A227" stopOpacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+    );
+};
 
 /**
  * Magnetic Button Component for Premium Interactivity
@@ -38,6 +170,9 @@ const MagneticButton = ({ children, className = "" }: { children: React.ReactNod
     );
 };
 
+/**
+ * Enhanced Interactive Video with Motion Graphics
+ */
 const InteractiveVideo = () => {
     const springX = useSpring(0, { stiffness: 40, damping: 20 });
     const springY = useSpring(0, { stiffness: 40, damping: 20 });
@@ -126,6 +261,12 @@ export default function Hero3D() {
 
             <BackgroundFace />
 
+            {/* Floating Particles */}
+            <FloatingParticles />
+
+            {/* Geometric Motion Graphics */}
+            <GeometricShapes />
+
             {/* Atmosphere Overlays */}
             <div className="absolute inset-0 opacity-[0.06] pointer-events-none z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black pointer-events-none z-10" />
@@ -197,9 +338,11 @@ export default function Hero3D() {
                     </motion.div>
                 </div>
 
-                {/* Right Column: Interaction Character */}
-                <div className="order-1 lg:order-2 flex justify-center items-center relative">
-                    <InteractiveVideo />
+                {/* Right Column: Holographic Avatar Video */}
+                <div className="order-1 lg:order-2 flex justify-center items-center relative w-full h-[60vh] md:h-[80vh]">
+                    <CursorRobot
+                        className="w-full h-full"
+                    />
 
                     {/* Corner Accents */}
                     <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-gold/20 pointer-events-none hidden xl:block" />
@@ -207,6 +350,31 @@ export default function Hero3D() {
                 </div>
             </motion.div>
 
+            {/* Animated Tech Lines on Right Side */}
+            <div className="absolute top-0 right-0 w-1/3 h-full pointer-events-none hidden lg:block overflow-hidden">
+                {[...Array(8)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent"
+                        style={{
+                            top: `${10 + i * 12}%`,
+                            left: "20%",
+                            width: "60%",
+                        }}
+                        initial={{ scaleX: 0, opacity: 0 }}
+                        animate={{
+                            scaleX: [0, 1, 0],
+                            opacity: [0, 0.5, 0],
+                        }}
+                        transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            delay: i * 0.4,
+                            ease: "easeInOut",
+                        }}
+                    />
+                ))}
+            </div>
 
             {/* Side Metadata */}
             <div className="absolute top-1/2 right-14 -translate-y-1/2 hidden xl:flex flex-col gap-16 opacity-40">

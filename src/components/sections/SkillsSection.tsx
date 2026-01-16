@@ -1,15 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code2, Camera, Palette, Lightbulb, Framer, Zap } from "lucide-react";
+import { Code2, Palette, Cpu, Cloud, GitBranch, Layout, Figma } from "lucide-react";
 
 const skills = [
-    { icon: Camera, name: "Cinematography", color: "#D4AF37", desc: "Digital cinematography & master-class lighting design." },
-    { icon: Code2, name: "Development", color: "#FF8C00", desc: "Building high-performance, accessible Next.js applications." },
-    { icon: Palette, name: "Color Grading", color: "#D4AF37", desc: "Expert color theory and custom LUT development." },
-    { icon: Lightbulb, name: "AI Strategy", color: "#FF8C00", desc: "Integrating Generative AI into creative workflows." },
-    { icon: Framer, name: "Figma Design", color: "#D4AF37", desc: "Architecting high-fidelity interfaces and design systems." },
-    { icon: Zap, name: "Innovation", color: "#FF8C00", desc: "Pushing the boundaries of interactive storytelling." },
+    { icon: Code2, name: "Frontend Development", color: "#FF8C00", desc: "Building responsive, high-performance web applications." },
+    { icon: Layout, name: "UI/UX Design", color: "#db2777", desc: "Designing intuitive user interfaces and experiences." },
+    { icon: Figma, name: "Figma Prototyping", color: "#D4AF37", desc: "Architecting high-fidelity interfaces and design systems." },
+    { icon: Cpu, name: "IoT & Embedded", color: "#FF8C00", desc: "Developing real-time monitoring and safety systems." },
+    { icon: Cloud, name: "Cloud Deployment", color: "#db2777", desc: "Deploying scalable applications on Cloudflare Pages." },
+    { icon: GitBranch, name: "Git & Docs", color: "#D4AF37", desc: "Version control and comprehensive technical documentation." },
 ];
 
 export default function SkillsSection() {

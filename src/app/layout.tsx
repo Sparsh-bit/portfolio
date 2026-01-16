@@ -25,10 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${cinzel.variable} ${montserrat.variable} bg-background text-foreground antialiased overflow-x-hidden selection:bg-gold selection:text-black`}>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning={true}>
+      <body
+        className={`${cinzel.variable} ${montserrat.variable} bg-background text-foreground antialiased overflow-x-hidden selection:bg-gold selection:text-black`}
+        suppressHydrationWarning={true}
+      >
         {children}
       </body>
     </html>
   );
 }
+

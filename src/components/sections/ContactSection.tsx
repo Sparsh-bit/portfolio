@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Github, Instagram, Linkedin, Mail, MapPin, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const socialLinks = [
     {
@@ -85,23 +86,20 @@ export default function ContactSection() {
                                 </div>
                             </div>
 
-                            <div className="group flex items-center gap-6 text-white hover:text-gold transition-all duration-500 cursor-pointer">
+                            <Link
+                                href="/resume"
+                                className="group flex items-center gap-6 text-white hover:text-gold transition-all duration-500 cursor-pointer"
+                            >
                                 <div className="p-4 bg-white/5 rounded-full group-hover:bg-gold/10 transition-all duration-500 group-hover:scale-105">
-                                    <Mail strokeWidth={1} size={24} className="rotate-90" />
+                                    <ArrowRight strokeWidth={1} size={24} />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-[10px] font-black tracking-[0.5em] uppercase text-gold mb-2">Voice Line</p>
+                                    <p className="text-[10px] font-black tracking-[0.5em] uppercase text-gold mb-2">AI Resume</p>
                                     <div className="relative h-10 flex items-center">
-                                        <p className="text-2xl md:text-3xl font-cinzel font-black tracking-tight group-hover:opacity-0 group-hover:-translate-y-4 transition-all duration-500 whitespace-nowrap">REVEAL NUMBER</p>
-                                        <a
-                                            href="tel:+919058672941"
-                                            className="absolute inset-0 text-2xl md:text-3xl font-mono font-bold tracking-widest text-white opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 transition-all duration-500 flex items-center whitespace-nowrap"
-                                        >
-                                            +91 9058672941
-                                        </a>
+                                        <p className="text-2xl md:text-3xl font-cinzel font-black tracking-tight group-hover:text-gold transition-all duration-500 whitespace-nowrap uppercase">View Resume</p>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
 
                             <div className="flex items-center gap-6 text-white">
                                 <div className="p-4 bg-white/5 rounded-full">

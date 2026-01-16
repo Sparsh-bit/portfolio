@@ -7,32 +7,32 @@ import { useRef } from "react";
 
 const projects = [
     {
-        title: "Frontend Architecture",
-        description: "Intelligent petrol pump management systems and cultural platforms built with high-performance logic.",
-        tags: ["Next.js", "TypeScript", "Architecture"],
-        link: "/projects/frontend-architecture",
-        github: "https://github.com/Sparsh-bit"
+        title: "Magh Mela Website",
+        description: "Designed and delivered a public-facing frontend website for Magh Mela with responsive layouts and UI/UX best practices.",
+        tags: ["React", "UI/UX", "Public Sector"],
+        link: "https://magh-mela.pages.dev/",
+        github: "https://github.com/Sparsh-bit/Magh-Mela"
     },
     {
-        title: "3D Interactive Portfolio",
-        description: "Immersive portfolio experience featuring physics-based animations and Three.js integration.",
-        tags: ["React", "Three.js", "Framer Motion"],
-        link: "/",
-        github: "https://github.com/Sparsh-bit"
+        title: "New Defence Public School",
+        description: "Developed a complete frontend website for an educational institution, focusing on structured content and cross-device compatibility.",
+        tags: ["Next.js", "Education", "Frontend"],
+        link: "https://new-defence-public-school.pages.dev/",
+        github: "https://github.com/Sparsh-bit/NDPS"
     },
     {
-        title: "Cinema Fades Showreel",
+        title: "Cinema Fades",
         description: "Professional collection of cinematography work featuring color grading and motion graphics.",
         tags: ["Cinematography", "Color Grading", "After Effects"],
         link: "/cinematography"
     },
     {
-        title: "Magh Mela Project",
-        description: "A cultural showcase and platform dedicated to the historic Magh Mela festival.",
-        tags: ["React", "Tailwind", "Animations"],
-        link: "https://magh-mela.pages.dev/",
-        github: "https://github.com/Sparsh-bit/Magh-Mela"
-    },
+        title: "Frontend Architecture",
+        description: "Intelligent petrol pump management systems and cultural platforms built with high-performance logic.",
+        tags: ["Next.js", "TypeScript", "Architecture"],
+        link: "/projects/frontend-architecture",
+        github: "https://github.com/Sparsh-bit"
+    }
 ];
 
 export default function ProjectsSection() {
@@ -84,57 +84,51 @@ export default function ProjectsSection() {
                     </div>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-x-16 gap-y-32">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {projects.map((project, index) => (
                         <motion.div
                             key={project.title}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: index * 0.1, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                            className="group relative"
+                            transition={{ delay: index * 0.1, duration: 0.8 }}
+                            className="group relative bg-white/[0.03] border border-white/5 rounded-3xl overflow-hidden hover:bg-white/[0.06] hover:border-white/10 transition-all duration-500 flex flex-col h-full"
                         >
-                            <div className="relative border-b-2 border-white/[0.08] pb-16 transition-all duration-700 group-hover:border-gold/40">
-                                <div className="flex justify-between items-center mb-10">
-                                    <div className="flex items-center gap-6">
-                                        <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                                        <div className="h-[1px] w-8 bg-white/10" />
-                                    </div>
-                                    <div className="flex gap-8 relative z-20">
-                                        {project.github && (
-                                            <a
-                                                href={project.github}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                onClick={(e) => e.stopPropagation()}
-                                                className="text-white/40 hover:text-white transition-all duration-300 hover:scale-125"
-                                            >
-                                                <Github size={22} strokeWidth={1} />
-                                            </a>
-                                        )}
-                                        <div className="text-white/40 group-hover:text-gold transition-all duration-300 group-hover:scale-125">
-                                            <ArrowUpRight size={26} strokeWidth={1} />
+                            <div className="p-8 flex flex-col h-full relative z-10">
+                                <div className="flex justify-between items-start mb-6">
+                                    <Link href={project.link}>
+                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-gold/20 group-hover:border-gold/30 transition-all duration-500 cursor-pointer">
+                                            <ArrowUpRight className="text-white/60 group-hover:text-gold transition-colors" size={18} />
                                         </div>
-                                    </div>
+                                    </Link>
+
+                                    {project.github && (
+                                        <a
+                                            href={project.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="text-white/20 hover:text-white transition-colors"
+                                        >
+                                            <Github size={20} />
+                                        </a>
+                                    )}
                                 </div>
 
-                                <Link
-                                    href={project.link}
-                                    className="block space-y-8 cursor-pointer"
-                                >
-                                    <h3 className="text-[clamp(1.8rem,4vw,3.5rem)] font-cinzel font-black text-white group-hover:tracking-wider transition-all duration-1000 uppercase leading-[0.9] pb-4">
+                                <Link href={project.link} className="block mb-6 flex-grow">
+                                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-gold transition-colors duration-300 font-cinzel leading-tight">
                                         {project.title}
                                     </h3>
-                                    <p className="text-white/60 text-[12px] leading-loose max-w-sm font-medium tracking-[0.1em] uppercase border-l border-gold/20 pl-6">
+                                    <p className="text-white/60 text-sm leading-relaxed font-light">
                                         {project.description}
                                     </p>
                                 </Link>
 
-                                <div className="mt-16 flex flex-wrap gap-x-10 gap-y-5">
+                                <div className="mt-auto flex flex-wrap gap-2">
                                     {project.tags.map((tag) => (
                                         <span
                                             key={tag}
-                                            className="text-[10px] font-black tracking-[0.4em] uppercase text-white/20 group-hover:text-gold/60 transition-colors"
+                                            className="px-3 py-1 text-[10px] font-bold tracking-wider uppercase text-white/40 bg-white/5 rounded-full border border-white/5"
                                         >
                                             {tag}
                                         </span>
@@ -142,8 +136,8 @@ export default function ProjectsSection() {
                                 </div>
                             </div>
 
-                            {/* Hover Reveal Glow */}
-                            <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-gold/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-3xl" />
+                            {/* Hover Glow */}
+                            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-gold/10 rounded-full blur-[60px] group-hover:bg-gold/20 transition-all duration-700" />
                         </motion.div>
                     ))}
                 </div>

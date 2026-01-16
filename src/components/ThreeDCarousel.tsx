@@ -68,7 +68,7 @@ export function useMediaQuery(
 }
 
 const duration = 0.15;
-const transition = { duration, ease: "easeInOut" as const, filter: "blur(4px)" };
+const transition = { duration, ease: "easeInOut" as const };
 const transitionOverlay = { duration: 0.5, ease: "easeInOut" as const };
 
 export interface CarouselItem {
@@ -84,7 +84,7 @@ const Carousel = memo(
         isCarouselActive,
     }: {
         handleClick: (item: CarouselItem, index: number) => void;
-        controls: any;
+        controls: ReturnType<typeof useAnimation>;
         cards: CarouselItem[];
         isCarouselActive: boolean;
     }) => {
@@ -104,15 +104,15 @@ const Carousel = memo(
 
         useAnimationFrame((t, delta) => {
             if (!isDragging && isCarouselActive) {
-                rotation.set(rotation.get() - (delta * 0.005));
+                rotation.set(rotation.get() - (delta * 0.008));
             }
         });
 
         return (
             <div
-                className="flex h-full items-center justify-center bg-transparent z-40"
+                className="flex h-full items-center justify-center"
                 style={{
-                    perspective: "1000px",
+                    perspective: "1200px",
                     transformStyle: "preserve-3d",
                 }}
             >
@@ -135,26 +135,38 @@ const Carousel = memo(
                     {cards.map((item, i) => (
                         <motion.div
                             key={`key-${item.src}-${i}`}
-                            className="absolute flex h-full origin-center items-center justify-center rounded-xl bg-transparent p-2"
+                            className="absolute flex h-full origin-center items-center justify-center p-3"
                             style={{
                                 width: `${faceWidth}px`,
-                                transform: `rotateY(${i * (360 / faceCount)
-                                    }deg) translateZ(${radius}px)`,
+                                transform: `rotateY(${i * (360 / faceCount)}deg) translateZ(${radius}px)`,
                             }}
                             onClick={() => handleClick(item, i)}
                         >
-                            <motion.img
-                                src={item.src}
-                                alt={item.title}
-                                layoutId={`img-${item.src}-${i}`}
-                                className="pointer-events-none w-full rounded-xl object-cover aspect-square hover:scale-105 transition-transform duration-300 border border-white/10"
-                                initial={{ filter: "blur(4px)" }}
-                                animate={{ filter: "blur(0px)" }}
-                                transition={transition}
-                                style={{
-                                    pointerEvents: isCarouselActive ? "auto" : "none",
-                                }}
-                            />
+                            {/* Card with glow effect */}
+                            <div className="relative group">
+                                {/* Glow behind card */}
+                                <div className="absolute -inset-2 bg-gradient-to-tr from-gold/20 via-gold/10 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                <motion.img
+                                    src={item.src}
+                                    alt={item.title}
+                                    layoutId={`img-${item.src}-${i}`}
+                                    className="relative w-full rounded-xl object-cover shadow-2xl shadow-black/50 border border-white/10 hover:border-gold/30 hover:scale-105 transition-all duration-300"
+                                    style={{
+                                        aspectRatio: "16/10",
+                                        maxHeight: "380px",
+                                        pointerEvents: isCarouselActive ? "auto" : "none",
+                                    }}
+                                    initial={{ filter: "blur(4px)" }}
+                                    animate={{ filter: "blur(0px)" }}
+                                    transition={transition}
+                                />
+
+                                {/* Title overlay on hover */}
+                                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent rounded-b-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <p className="text-gold text-xs font-bold tracking-[0.3em] uppercase">{item.title}</p>
+                                </div>
+                            </div>
                         </motion.div>
                     ))}
                 </motion.div>
@@ -182,7 +194,12 @@ const ThreeDCarousel = ({ items }: { items: CarouselItem[] }) => {
     };
 
     return (
-        <motion.div layout className="relative w-full h-[600px] overflow-hidden">
+        <motion.div layout className="relative w-full h-[700px] overflow-visible">
+            {/* Background glow */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-[600px] h-[400px] bg-gold/5 rounded-full blur-[120px]" />
+            </div>
+
             <AnimatePresence mode="popLayout">
                 {activeItem && (
                     <motion.div
@@ -192,15 +209,15 @@ const ThreeDCarousel = ({ items }: { items: CarouselItem[] }) => {
                         layoutId={`img-container-${activeItem.src}`}
                         layout="position"
                         onClick={handleClose}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 cursor-zoom-out"
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 cursor-zoom-out"
                         style={{ willChange: "opacity" }}
                         transition={transitionOverlay}
                     >
-                        <div className="relative max-w-5xl w-full flex flex-col items-center gap-6" onClick={(e) => e.stopPropagation()}>
+                        <div className="relative max-w-5xl w-full flex flex-col items-center gap-8" onClick={(e) => e.stopPropagation()}>
                             <motion.img
                                 layoutId={`img-${activeItem.src}`}
                                 src={activeItem.src}
-                                className="max-h-[70vh] w-auto rounded-lg shadow-2xl border border-white/10"
+                                className="max-h-[70vh] w-auto rounded-xl shadow-2xl shadow-gold/10 border border-gold/20"
                                 initial={{ scale: 0.5 }}
                                 animate={{ scale: 1 }}
                                 transition={{
@@ -213,23 +230,15 @@ const ThreeDCarousel = ({ items }: { items: CarouselItem[] }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="text-center space-y-2 pointer-events-none"
+                                className="text-center space-y-4 pointer-events-none max-w-2xl"
                             >
-                                <h3 className="text-2xl font-cinzel font-bold text-white uppercase tracking-widest text-gold">{activeItem.title}</h3>
-                                <p className="text-white/60 text-sm tracking-wider font-light uppercase">{activeItem.desc}</p>
+                                <h3 className="text-3xl font-cinzel font-bold text-gold uppercase tracking-[0.2em]">{activeItem.title}</h3>
+                                <p className="text-white/60 text-sm tracking-wider leading-relaxed">{activeItem.desc}</p>
                             </motion.div>
 
                             <button
                                 onClick={handleClose}
-                                className="absolute top-4 right-4 px-6 py-3 text-white/90 hover:text-gold transition-all duration-300 font-bold tracking-[0.3em] uppercase text-xs backdrop-blur-sm bg-black/20 rounded-sm border border-white/10 hover:border-gold/50 hover:scale-105"
-                                style={{
-                                    textShadow: `
-                                        0 0 10px rgba(255, 255, 255, 0.6),
-                                        0 0 20px rgba(255, 255, 255, 0.4),
-                                        0 0 30px rgba(255, 255, 255, 0.3),
-                                        0 0 40px rgba(212, 175, 55, 0.2)
-                                    `
-                                }}
+                                className="absolute top-4 right-4 px-8 py-4 text-white/90 hover:text-gold transition-all duration-300 font-bold tracking-[0.3em] uppercase text-xs backdrop-blur-sm bg-black/30 rounded-sm border border-white/10 hover:border-gold/50 hover:scale-105"
                             >
                                 Close
                             </button>
@@ -237,7 +246,8 @@ const ThreeDCarousel = ({ items }: { items: CarouselItem[] }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
-            <div className="relative h-[600px] w-full overflow-hidden">
+
+            <div className="relative h-[700px] w-full overflow-visible">
                 <Carousel
                     handleClick={handleClick}
                     controls={controls}

@@ -53,18 +53,9 @@ export default function Navbar() {
                         </span>
                     </Link>
 
-                    {/* Desktop Center Nav */}
+                    {/* Desktop Center Nav - Hidden as we use Floating Dock */}
                     <div className="hidden lg:flex gap-12 items-center">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/30 hover:text-white transition-all duration-500 relative group py-1"
-                            >
-                                {link.name}
-                                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gold/50 transition-all duration-500 group-hover:w-full group-hover:shadow-[0_0_8px_#D4AF37]" />
-                            </Link>
-                        ))}
+                        {/* Links removed for Floating Dock */}
                     </div>
 
                     {/* Desktop CTA */}

@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^8.2.2",
+    "@react-three/fiber": "^9.5.0",
     "@rive-app/react-canvas": "^4.25.1",
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.36",
     "@types/three": "^0.182.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
