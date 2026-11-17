@@ -14,27 +14,13 @@ const PAGES = [
   { to: "/backstory", label: "Backstory" },
 ];
 
-/** The SS ligature mark — Sparsh Sharma. Luxury seal: squircle disc, hairline gold ring, refined SS curves. */
+/** The S monogram — editorial serif S in an ink disc, gold full-stop. */
 export function Mark({ size = 28 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden>
-      <defs>
-        <linearGradient id="ss-mark-bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#1A282B" />
-          <stop offset="1" stopColor="#0B1214" />
-        </linearGradient>
-      </defs>
-      <rect width="48" height="48" rx="14" fill="url(#ss-mark-bg)" />
-      <rect x="1.75" y="1.75" width="44.5" height="44.5" rx="12.5" fill="none" stroke="#B08A55" strokeOpacity=".55" strokeWidth="1" />
-      {/* first S (teal) */}
-      <g stroke="#5FC4BE" strokeWidth="3.2" strokeLinecap="round" fill="none">
-        <path d="M19 9.5 H12.8 a4.8 4.8 0 0 0 0 9.6 h2.1 a4.8 4.8 0 0 1 0 9.6 H9.5" />
-      </g>
-      {/* second S (white, offset — the SS ligature) */}
-      <g stroke="#FFFFFF" strokeWidth="3.2" strokeLinecap="round" fill="none" opacity=".95">
-        <path d="M39.5 19.3 H33.3 a4.8 4.8 0 0 0 0 9.6 h2.1 a4.8 4.8 0 0 1 0 9.6 H28.6" />
-      </g>
-      <circle cx="40" cy="9" r="2.1" fill="#5FC4BE" />
+      <circle cx="24" cy="24" r="23" fill="#0E1517" />
+      <text x="21" y="33.5" textAnchor="middle" fontFamily="'Cormorant Garamond', Georgia, 'Times New Roman', serif" fontStyle="italic" fontWeight={600} fontSize="30" fill="#FFFFFF">S</text>
+      <circle cx="32.5" cy="32.5" r="2" fill="#B08A55" />
     </svg>
   );
 }
