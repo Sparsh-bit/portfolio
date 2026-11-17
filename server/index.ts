@@ -13,20 +13,48 @@ attachDatabasePool(pool);
 
 const SLOTS = [10, 11, 12, 13, 14, 15, 16, 17]; // 10:00–18:00 IST, hourly
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+/** Origins allowed to call this API from a browser. `*` would let any site farm the form. */
+const ALLOWED_ORIGINS = new Set([
+  "https://sparshsharma.in",
+  "https://www.sparshsharma.in",
+  "http://localhost:4173", // production preview build
+  "http://localhost:5173", // vite dev
+]);
+
+/** Best-effort in-memory rate limiter (per Neon Function instance): 8 submissions / 15 min per IP. */
+const RATE_WINDOW_MS = 15 * 60 * 1000;
+const RATE_MAX = 8;
+const rateHits = new Map<string, number[]>();
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const hits = (rateHits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (hits.length >= RATE_MAX) return true;
+  hits.push(now);
+  rateHits.set(ip, hits);
+  // occasional cleanup of stale entries
+  if (rateHits.size > 500) rateHits.forEach((v, k) => { if (v.every((t) => now - t >= RATE_WINDOW_MS)) rateHits.delete(k); });
+  return false;
+}
+
+function corsHeaders(origin: string | undefined): Record<string, string> {
+  const headers: Record<string, string> = {
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+  if (origin && ALLOWED_ORIGINS.has(origin)) headers["Access-Control-Allow-Origin"] = origin;
+  return headers;
+}
 
 const json = (c: { json: (o: unknown, s?: number) => Response }, data: unknown, status = 200) => c.json(data, status);
 
 const app = new Hono();
 
 app.use("*", async (c, next) => {
-  if (c.req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  const origin = c.req.header("origin");
+  const headers = corsHeaders(origin);
+  if (c.req.method === "OPTIONS") return new Response(null, { status: 204, headers });
   await next();
-  Object.entries(CORS).forEach(([k, v]) => c.res.headers.set(k, v));
+  Object.entries(headers).forEach(([k, v]) => c.res.headers.set(k, v));
 });
 
 /** Health */
@@ -50,6 +78,9 @@ app.get("/slots", async (c) => {
 
 /** POST /bookings — create a booking request. */
 app.post("/bookings", async (c) => {
+  const ip = (c.req.header("x-forwarded-for") ?? "unknown").split(",")[0].trim();
+  if (rateLimited(ip)) return json(c, { error: "too many requests — try again later" }, 429);
+
   let body: Record<string, unknown>;
   try {
     body = await c.req.json();
