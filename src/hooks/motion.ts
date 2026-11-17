@@ -89,15 +89,17 @@ export function tilt3d(el: HTMLElement, max = 5) {
 export function useHeroIntro(root: RefObject<HTMLElement | null>, deps: DependencyList = []) {
   useIso(() => {
     const el = root.current;
-    if (!el || motionOff()) return;
+    // Hero intro only applies to pages that actually contain the hero markup.
+    if (!el || motionOff() || (!el.querySelector(".hero-h") && !el.querySelector(".hero-in"))) return;
     const h = el.querySelector<HTMLElement>(".hero-h");
     const sp = h ? splitText(h, { words: { wrap: "clip" } }) : null;
     if (h && sp) {
       h.style.opacity = "1";
       sp.addEffect((x: { words: HTMLElement[] }) => animate(x.words, { translateY: ["110%", "0%"], rotate: [4, 0], duration: 900, delay: stagger(45, { start: 120 }), ease: "outQuart" }));
     }
-    const a = animate(el.querySelectorAll(".hero-in"), { opacity: [0, 1], translateY: [14, 0], delay: stagger(90, { start: 420 }), duration: 800, ease: "outQuart" });
-    return () => { a.revert(); try { sp?.revert(); } catch { /* noop */ } };
+    const heroIn = el.querySelectorAll(".hero-in");
+    const a = heroIn.length ? animate(heroIn, { opacity: [0, 1], translateY: [14, 0], delay: stagger(90, { start: 420 }), duration: 800, ease: "outQuart" }) : null;
+    return () => { a?.revert(); try { sp?.revert(); } catch { /* noop */ } };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }
