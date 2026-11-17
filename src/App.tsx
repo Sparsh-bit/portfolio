@@ -29,13 +29,16 @@ function ScrollManager() {
 }
 
 function Shell() {
+  const { pathname } = useLocation();
   return (
     <>
       <SmoothScroll />
       <ScrollManager />
       <Cursor />
       <Header />
-      <Page>
+      {/* Remount per route: re-runs the reveal/hero wiring on every page change,
+          exactly as a full page load would (content is opacity-0 until wired). */}
+      <Page key={pathname}>
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
