@@ -1,12 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <rect width="48" height="48" rx="12" fill="#0E1517"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1A282B"/>
+      <stop offset="1" stop-color="#0B1214"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="14" fill="url(#bg)"/>
+  <!-- hairline gold ring -->
+  <rect x="1.75" y="1.75" width="44.5" height="44.5" rx="12.5" fill="none" stroke="#B08A55" stroke-opacity=".55" stroke-width="1"/>
   <!-- first S (teal) -->
-  <g stroke="#5FC4BE" stroke-width="4.2" stroke-linecap="round" fill="none">
-    <path d="M18 8 H11.5 a5.5 5.5 0 0 0 0 11 H14 a5.5 5.5 0 0 1 0 11 H8"/>
+  <g stroke="#5FC4BE" stroke-width="3.2" stroke-linecap="round" fill="none">
+    <path d="M19 9.5 H12.8 a4.8 4.8 0 0 0 0 9.6 h2.1 a4.8 4.8 0 0 1 0 9.6 H9.5"/>
   </g>
   <!-- second S (white, offset — the SS ligature) -->
-  <g stroke="#FFFFFF" stroke-width="4.2" stroke-linecap="round" fill="none" opacity=".92">
-    <path d="M40 18 H33.5 a5.5 5.5 0 0 0 0 11 H36 a5.5 5.5 0 0 1 0 11 H30"/>
+  <g stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" fill="none" opacity=".95">
+    <path d="M39.5 19.3 H33.3 a4.8 4.8 0 0 0 0 9.6 h2.1 a4.8 4.8 0 0 1 0 9.6 H28.6"/>
   </g>
-  <circle cx="41.5" cy="8.5" r="2.4" fill="#5FC4BE"/>
+  <circle cx="40" cy="9" r="2.1" fill="#5FC4BE"/>
 </svg>
